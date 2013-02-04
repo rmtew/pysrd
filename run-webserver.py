@@ -130,7 +130,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.WriteChunk(chunk1)
                 self.WriteChunk(chunk2)
                 self.WriteChunk()
-            else:
+            elif path.endswith(".ico") != ".":     # EXPLICIT BINARY FILES
+                self.wfile.write(body)
+            else:                                   # TEXT
                 self.wfile.write(body.encode('ascii','xmlcharrefreplace'))
         else:
             # Page not found.
@@ -263,6 +265,11 @@ def table_link(table_name, sort_column_name=None, link_text=None):
 def table_row_link(table_name, row_id):
     return "<a href='/row?table=%s&row_id=%s'>%s</a>" % (table_name, row_id, row_id)
 
+
+def icon_fetcher(handler, path, kwargs):
+    return open("favicon.ico", "rb").read()
+
+RequestHandler.page_handlers["/favicon.ico"] = icon_fetcher
 
 def page_view_row(handler, path, kwargs):
     # /row?table=<table_name>&row_id=<row_id>
