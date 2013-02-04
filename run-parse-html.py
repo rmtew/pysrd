@@ -19,13 +19,19 @@ LICENSE
 
 OVERVIEW
 
-    The SQLite database provided by highmage, and available here (http://www.andargor.com/) lacks
-    some data from the SRD.  This script parses additional SRD information from Josh Ritter's
-    OpenSRD (http://sourceforge.net/projects/opensrd) HTML files.
+    The SQLite database provided by highmage, and available here
+    (http://www.andargor.com/) lacks some data from the SRD.  This script
+    parses additional SRD information from Josh Ritter's OpenSRD
+    (http://sourceforge.net/projects/opensrd) HTML files.
 
     You will need to ensure the following variables have the correct values:
-        DATABASE_FILENAME:  Name of a local file containing the SQLite database created by highmage.
-        HTML_DIR_NAME:      Name of local directory immediately containing the OpenSRD html files.
+        DATABASE_FILENAME:  Name of a local file containing the SQLite database
+                            created by highmage.
+        HTML_DIR_NAME:      Name of local directory immediately containing the
+                            OpenSRD html files.
+
+    Additionally, generally unparseable data is hard-coded into a secondary
+    script and will be injected directly into custom tables.
 """
 
 import bs4 # c:\python27\Scripts\pip.exe install beautifulsoup4
@@ -330,15 +336,9 @@ def create_callback(table_name, statements):
     return cb
 
 def run():
-    if False:
-        statements = []
-        cb = create_callback("abilities_table", statements)
-        parse_abilities_table(cb)
-        for s in statements:
-            print s.encode('ascii','xmlcharrefreplace')
-        return
-
     conn = sqlite3.connect(DATABASE_FILENAME)
+
+    # Pass 1: Parse HTML pages and extract data.
     for (table_name, func) in (
             ("conditions", parse_conditions),
             ("special_abilities", parse_special_abilities),
@@ -359,6 +359,8 @@ def run():
         conn.commit()
         c.close()
 
+    # Pass 2: Inject hard-coded data.
+
 
 if __name__ == "__main__":
     current_path = sys.path[0]
@@ -366,4 +368,6 @@ if __name__ == "__main__":
 
     run()
 
+    # Useful if run on Windows within explorer by double-clicking on the BAT
+    # script, and you want the window to stay open so you can inspect output.
     raw_input("Press enter to continue..")
