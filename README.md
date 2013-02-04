@@ -23,7 +23,7 @@ All files that comprise this are released under the GPLv3 license.
 
 ## Installation
 
-Currently Peasauce is prototyped in Python using wxPython to display it's user interface.  The only installation you need to do, is to ensure the following prerequisites are installed on your computer.
+The only installation you need to do, is to ensure the following prerequisites are installed on your computer, and in the correct locations.
 
 1. Download and install [Python 2.7](http://python.org/download/) for your platform.
 2. Download and install [Beautiful Soup 4](http://pypi.python.org/pypi/beautifulsoup4/4.1.3) extension module for Python 2.7 on your platform.
